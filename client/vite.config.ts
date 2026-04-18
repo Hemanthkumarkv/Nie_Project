@@ -18,13 +18,13 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: 5002,
     proxy: {
       "/api": {
-        target: "http://134.209.61.236:5000",
+        target: "http://134.209.61.236:5001",
         changeOrigin: true,
         secure: false,
-      },
+      }, 
     },
   },
   build: {

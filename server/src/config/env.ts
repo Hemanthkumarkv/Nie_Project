@@ -1,15 +1,15 @@
 import dotenv from "dotenv";
 import { z } from "zod";
-
+//
 dotenv.config();
 
 const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
-  PORT: z.coerce.number().default(5000),
-  CLIENT_URL: z.string().url().default("http://localhost:5173"),
-  APP_URL: z.string().url().default("http://localhost:5000"),
+  PORT: z.coerce.number().default(5001),
+  CLIENT_URL: z.string().url().default("http://localhost:5002"),
+  APP_URL: z.string().url().default("http://localhost:5001"),
   SERVER_IP: z.string().default("0.0.0.0"),
   DATABASE_URL: z.string().optional(),
   DB_USER: z.string().default("postgres"),
