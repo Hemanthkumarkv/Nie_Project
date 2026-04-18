@@ -92,14 +92,15 @@ app.use(
           return callback(null, defaultOrigin);
         }
 
-        // Allow any localhost origin in development
+        // Allow any localhost or static IP origin in development
         if (
           origin.startsWith("http://localhost:") ||
           origin.startsWith("http://127.0.0.1:") ||
+          origin.startsWith(`http://${config.server.ip}:`) ||
           allowedOrigins.includes(origin)
         ) {
           console.log("Allowing origin:", origin);
-          return callback(null, origin); // Return the exact origin string
+          return callback(null, origin);
         }
 
         // Reject unknown origins

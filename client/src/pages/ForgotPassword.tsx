@@ -1,4 +1,3 @@
-
 import { useState, FormEvent } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { Eye, EyeOff, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react";
@@ -126,7 +125,6 @@ export default function ForgotPassword() {
                 Check your email for instructions.
               </p>
 
-              {resetTokenDev && process.env.NODE_ENV !== "production" && (
                 <div className="mt-3 p-3 bg-slate-700 rounded">
                   <p className="text-xs text-yellow-400 mb-1">Dev Token:</p>
                   <button
@@ -136,7 +134,6 @@ export default function ForgotPassword() {
                     Click to reset now
                   </button>
                 </div>
-              )}
             </div>
           ) : (
             <form onSubmit={handleEmailSubmit} className="space-y-4 text-left">
