@@ -5,6 +5,8 @@ export const config = {
   isProduction,
   server: {
     port: env.PORT,
+    url: env.APP_URL,
+    ip: env.SERVER_IP,
   },
   client: {
     url: env.CLIENT_URL,

@@ -1,5 +1,6 @@
 import pkg from "pg";
 import { config } from "../config";
+import { hashPassword } from "../utils/crypto";
 const { Pool } = pkg;
 
 const connectionOptions = config.db.connectionString
@@ -144,5 +145,36 @@ export async function initDB() {
     );
   `);
 
+  await seedDefaultUser();
+
   console.log("✅ Tables ready");
+}
+
+async function seedDefaultUser() {
+  try {
+    const { rows } = await pool.query('SELECT COUNT(*) FROM "User"');
+    const userCount = parseInt(rows[0].count);
+
+    if (userCount === 0) {
+      console.log("🌱 No users found. Seeding default admin user...");
+
+      const hashedPassword = await hashPassword(config.env.ADMIN_PASSWORD);
+
+      await pool.query(
+        `INSERT INTO "User" (email, username, password, role, "isEmailVerified", "loginType") 
+         VALUES ($1, $2, $3, 'ADMIN', true, 'EMAIL_PASSWORD')`,
+        [
+          config.env.ADMIN_EMAIL,
+          config.env.ADMIN_USERNAME,
+          hashedPassword
+        ]
+      );
+
+      console.log(`✅ Default admin user created: ${config.env.ADMIN_EMAIL}`);
+    } else {
+      console.log(`✅ Database already has ${userCount} users. Skipping seeding.`);
+    }
+  } catch (error) {
+    console.error("❌ Error seeding default user:", error);
+  }
 }

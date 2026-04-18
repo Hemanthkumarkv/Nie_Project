@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: sensor_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "Hemanth@#1996"
+      POSTGRES_DB: Sensor_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sensor_network
+
+  server:
+    build: ./server
+    container_name: sensor_server
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:Hemanth%40%231996@db:5432/Sensor_db?schema=public
+      - PORT=5000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SERVER_IP=134.209.61.236
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - sensor_network
+
+  client:
+    build: ./client
+    container_name: sensor_client
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - sensor_network
+
+networks:
+  sensor_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

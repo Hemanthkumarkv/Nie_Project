@@ -26,7 +26,6 @@
 // // Run main function
 // main();
 // ======================================
-
 // src/index.ts
 import { config } from "./config";
 import app from "./app";
@@ -36,18 +35,20 @@ import { initDB } from "./db";
 async function bootstrap() {
   try {
     await initDB();
-    
     // Start WebSocket connection (non-blocking - failures won't stop the server)
     try {
       connectWebSocket();
     } catch (wsError) {
-      console.error("⚠️ WebSocket initialization error (server will continue):", wsError);
+      console.error(
+        "⚠️ WebSocket initialization error (server will continue):",
+        wsError,
+      );
       // Don't exit - server should continue running even if WebSocket fails
     }
 
-    const server = app.listen(config.server.port, () => {
+    const server = app.listen(config.server.port, "0.0.0.0", () => {
       console.log(
-        `🚀 API server running on port ${config.server.port} (${config.env.NODE_ENV})`
+        `🚀 API server running at http://${config.server.ip}:${config.server.port} (${config.env.NODE_ENV})`,
       );
     });
 
